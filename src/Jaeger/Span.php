@@ -2,7 +2,7 @@
 
 namespace Jaeger;
 
-use OpenTracing\SpanContext;
+//use OpenTracing\SpanContext;
 use OpenTracing\Reference;
 use Jaeger\Thrift\SpanRefType;
 
