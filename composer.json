@@ -1,5 +1,5 @@
 {
-  "name":              "jukylin/jaeger-php",
+  "name":              "yuslf/jaeger-php",
   "description":       "php client for jaeger",
   "keywords":          ["jaeger","trace","opentracing"],
   "license":           "MIT",
@@ -11,8 +11,8 @@
   },
   "authors": [
     {
-      "name": "jukylin",
-      "email": "742161455@qq.com"
+      "name": "yuslf",
+      "email": "angelo@263.net"
     }
   ],
   "autoload":          {
