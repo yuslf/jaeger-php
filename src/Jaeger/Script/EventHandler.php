@@ -1,9 +1,9 @@
 <?php
 namespace Jaeger\Script;
 
-use Composer\Util\Filesystem;
-use Composer\Script\Event;
-use Composer\Script\PackageEvent;
+use \Composer\Util\Filesystem;
+use \Composer\Script\Event;
+use \Composer\Script\PackageEvent;
 
 class EventHandler
 {
