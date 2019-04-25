@@ -1,9 +1,9 @@
 <?php
 namespace Jaeger\Script;
 
-use \Composer\Util\Filesystem;
-use \Composer\Script\Event;
-use \Composer\Script\PackageEvent;
+use Composer\Util\Filesystem;
+use Composer\Script\Event;
+use Composer\Script\PackageEvent;
 
 class EventHandler
 {
@@ -64,7 +64,7 @@ class EventHandler
             $app_path = false;
         }
 
-        $fop = Filesystem();
+        $fop = new Filesystem();
 
         //如果有application目录则拷贝框架扩展文件
         if ($app_path) {

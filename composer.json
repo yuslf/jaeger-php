@@ -22,5 +22,8 @@
     "files": [
       "src/Jaeger/Constants.php"
     ]
+  },
+  "scripts": {
+    "post-update-cmd": "Jaeger\\Script\\EventHandler::postUpdateCmd"
   }
 }
