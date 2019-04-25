@@ -22,26 +22,5 @@
     "files": [
       "src/Jaeger/Constants.php"
     ]
-  },
-  "scripts": {
-    "pre-install-cmd": "Jaeger\\Script\\EventHandler::test",
-    "post-install-cmd": "Jaeger\\Script\\EventHandler::test",
-    "pre-update-cmd": "Jaeger\\Script\\EventHandler::test",
-    "post-update-cmd": "Jaeger\\Script\\EventHandler::test",
-    "post-status-cmd": "Jaeger\\Script\\EventHandler::test",
-    "pre-archive-cmd": "Jaeger\\Script\\EventHandler::test",
-    "post-archive-cmd": "Jaeger\\Script\\EventHandler::test",
-    "pre-autoload-dump": "Jaeger\\Script\\EventHandler::test",
-    "post-autoload-dump": "Jaeger\\Script\\EventHandler::test",
-    "post-root-package-install": "Jaeger\\Script\\EventHandler::test",
-    "post-create-project-cmd": "Jaeger\\Script\\EventHandler::test",
-
-    "pre-package-install": "Jaeger\\Script\\EventHandler::postPackageInstall",
-    "post-package-install": "Jaeger\\Script\\EventHandler::postPackageInstall",
-    "pre-package-update": "Jaeger\\Script\\EventHandler::postPackageInstall",
-    "post-package-update": "Jaeger\\Script\\EventHandler::postPackageInstall",
-    "pre-package-uninstall": "Jaeger\\Script\\EventHandler::postPackageInstall",
-    "post-package-uninstall": "Jaeger\\Script\\EventHandler::postPackageInstall"
-
   }
 }
