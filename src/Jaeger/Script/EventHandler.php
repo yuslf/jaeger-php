@@ -1,0 +1,27 @@
+<?php
+namespace Jaeger\Script;
+
+//use Composer\Script\Event;
+use Composer\Installer\PackageEvent;
+
+class EventHandler
+{
+    public static function postPackageInstall(PackageEvent $event)
+    {
+        $installedPackage = $event->getOperation()->getPackage();
+
+        echo '$installedPackage->getName()';
+        var_dump($installedPackage->getName());
+        echo '$installedPackage->getPrettyName()';
+        var_dump($installedPackage->getPrettyName());
+        echo '$installedPackage->getTargetDir()';
+        var_dump($installedPackage->getTargetDir());
+        echo '$installedPackage->getInstallationSource()';
+        var_dump($installedPackage->getInstallationSource());
+        echo '$installedPackage->getSourceReference()';
+        var_dump($installedPackage->getSourceReference());
+        echo '$installedPackage->getIncludePaths()';
+        var_dump($installedPackage->getIncludePaths());
+    }
+
+}

@@ -22,5 +22,10 @@
     "files": [
       "src/Jaeger/Constants.php"
     ]
+  },
+  "scripts": {
+    "post-package-install": [
+      "Jaeger\\Script\\EventHandler::postPackageInstall"
+    ]
   }
 }
