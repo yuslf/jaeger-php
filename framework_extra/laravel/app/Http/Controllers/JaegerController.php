@@ -12,39 +12,41 @@ class JaegerController extends Controller
 {
     public function test()
     {
+        $res = [];
+
+        //测试httpclient
+        /*
         $url = 'http://127.0.0.1:8002/jaeger';
-
-        $client = new Client();
-
-        $helper = new HttpClientHelper();
-
+        $httpClientRes = [];
         try {
-            //$res = $client->GET($url, ['headers' => JaegerBefore::$inject]);
-
-            //$res = $helper->GET($url);
-
-            $res = HttpClient::GET($url);
-
+            $h = HttpClient::GET($url);
+            $httpClientRes['res'] = $h->getBody();
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            $httpClientRes['error'] = $e->getMessage();
         }
+        $res['http_client'] = $httpClientRes;
+        */
 
+        //测试数据库访问
+        /*
         DB::insert('INSERT INTO `project`(`name`, `vcs`) VALUES(?, ?)', ['P1', 'p1.git']);
-
         $dbRes = DB::select('SELECT * FROM `project` WHERE 1 ORDER BY `id` DESC LIMIT 2');
+        $res['db'] = $dbRes;
+        */
 
-        return json_encode(['jaeger2' => strval($res->getBody()), 'db' => (array) $dbRes]);
+        //测试Redis访问
+        /*
+        $RedisRes = intval(Redis::get("jaeger:test"));
+        $RedisRes ++;
+        Redis::set("jaeger:test", $RedisRes);
+        $res['redis'] = $RedisRes;
+        */
 
-
-
-        $test = intval(Redis::get("jaeger:test"));
-        $test ++;
-        Redis::set("jaeger:test:", $test);
-
+        //手动埋探针测试
         event(new JaegerStartSpan('jaeger test', 'hahahahhahahahaah'));
 
-        return json_encode(['db' => Project::find(72), 'redis' => $test]);
-        //return view('user.profile', ['user' => User::findOrFail($id)]);
-        //return view('user.profile', ['user' => User::findOrFail($id)]);
+        $res['ok'] = true;
+
+        return json_encode($res);
     }
 }
