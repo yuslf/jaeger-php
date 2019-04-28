@@ -25,7 +25,7 @@ class JeagerTracer {
     {
         $ci = & get_instance();
         if ($ci->config->load('jeager', TRUE, TRUE)) {
-            $this->config = array_merge($this->config, $ci->config->config['redis']);
+            $this->config = array_merge($this->config, $ci->config->config['jeager']);
         }
 
         if (is_null($this->jeagerConfig)) {
