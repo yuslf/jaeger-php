@@ -37,6 +37,6 @@ class Jeagerphpciextra extends CI_Controller
 
         echo '</pre>';
 
-        exit;
+        return; //千万不要用exit
     }
 }

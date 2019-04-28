@@ -10,7 +10,7 @@
 |
 */
 
-$hook['pre_system'][] = array(
+$hook['post_controller_constructor'][] = array(
     'class'    => 'JeagerHook',
     'function' => 'Before',
     'filename' => 'JeagerHook.php',
