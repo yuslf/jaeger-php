@@ -113,20 +113,20 @@ class EventHandler
     public static function postUpdateCmd(Event $event)
     {
         //检测用户是否要安装框架扩展文件
-        $args = $event->getArguments();
+        /*$args = $event->getArguments();
         if (empty($args)) {
             return ;
         }
         if (strtolower(substr($args[0], 0, 16)) !== 'yuslf/jaeger-php') {
             return ;
-        }
+        }*/
 
         //初始化IO对象
         $io = $event->getIO();
 
         //询问用户是否现在安装框架扩展文件
         if (! $io->askConfirmation('>>Jaeger-PHP:需要安装包含了Jeager-PHP功能的框架扩展文件吗[y|n]?')) {
-            return $io->write('>>Jaeger-PHP:OK,已经放弃安装,如果以后需要安装,可以执行命令行: composer update yuslf/jaeger-php' . "\n");
+            return $io->write('>>Jaeger-PHP:OK,已经放弃安装,如果以后需要安装,可以执行命令行: composer update' . "\n");
         }
 
         //检测Jeager-PHP是否安装
@@ -175,31 +175,35 @@ class EventHandler
         ];
         foreach ($files as $f)
         {
-            $message[] = "    >>{$f[0]} => {$f[1]}" . (file_exists($f[1]) ? '(存在)' : '');
+            $message[] = "    >>From:{$f[0]}";
+            $message[] = "    >>To:{$f[1]}" . (file_exists($f[1]) ? '(存在)' : '') . "\n";
         }
         $io->write($message);
         $io->write('>>Jaeger-PHP:如果目标文件已经存在,安装时会直接将其覆盖,请在安装前备份这些文件.');
 
         if (! $io->askConfirmation('>>Jaeger-PHP:确定要安装这些文件吗[y|n]?')) {
-            return $io->error('>>Jaeger-PHP:OK,已经放弃安装,如果以后需要安装,可以执行命令行: composer update yuslf/jaeger-php' . "\n");
+            return $io->error('>>Jaeger-PHP:OK,已经放弃安装,如果以后需要安装,可以执行命令行: composer update');
         }
 
         $success = [];
         $failure = [];
         foreach ($files as $f)
         {
+            $targetPath = dirname($f[1]);
+            if (! file_exists($targetPath)) {
+                @ mkdir($targetPath, '755', true);
+            }
             if (@ copy($f[0], $f[1])) {
-                $success[] = "    >>{$f[0]} => {$f[1]} Done.";
+                $success[] = "    >>{$f[1]} Done.";
             } else {
-                $err = error_get_last();
-                $failure[] = "    >>{$f[0]} => {$f[1]} Failed. Error:{$err['type']}--{$err['message']}";
+                $failure[] = "    >>{$f[1]} Failed. ";
             }
         }
         $io->write($success);
         if (! empty($failure)) {
             $io->write("\n" . '>>Jaeger-PHP: 安装如下文件失败: ');
             $io->write($failure);
-            return $io->error('>>Jaeger-PHP:请检查失败原因,并重新安装.' . "\n");
+            return $io->error('>>Jaeger-PHP:请检查失败原因,并重新安装.');
         }
 
         $io->write("\n" . '>>Jaeger-PHP: 安装成功! 请参考下面的信息配置你的项目：');
@@ -210,7 +214,7 @@ class EventHandler
             $io->write(static::getLaravelNotice());
         }
 
-        $io->write("\n" . '>>Jaeger-PHP: 祝好运!');
+        $io->write("\n" . '>>Jaeger-PHP: 祝好运!' . "\n");
     }
 
 }
