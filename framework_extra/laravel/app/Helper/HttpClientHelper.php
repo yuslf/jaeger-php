@@ -11,6 +11,12 @@ class HttpClientHelper extends Client
     {
         $u = parse_url($url);
         $event = new JaegerStartSpan('HttpClient - ' . $method, $message);
+        if (empty($u['port'])) {
+            $u['port'] = 80;
+        }
+        if (empty($u['path'])) {
+            $u['path'] = '/';
+        }
         $event->setRpcTag('client', $url, $u['host'], 'n/a', 'n/a', $u['port'], $u['path']);
 
         if ($ErrorObj OR $ErrorKind OR $ErrorStack) {
@@ -45,7 +51,7 @@ class HttpClientHelper extends Client
         }
 
         if (! empty($args[2])) {
-            $this->_eventJaegerStartSpan($args[0], $method, 'Done[' . $res->getState() . ':' . $res->getStatusCode() . ']!');
+            $this->_eventJaegerStartSpan($args[0], $method, 'Done[' . $res->getStatusCode() . ']!');
         }
 
         return $res;
