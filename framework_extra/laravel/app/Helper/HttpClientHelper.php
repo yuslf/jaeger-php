@@ -46,11 +46,13 @@ class HttpClientHelper extends Client
         try {
             $res = parent::__call($method, $args);
         } catch (\Exception $e) {
-            $this->_eventJaegerStartSpan($args[0], $method, $e->getMessage(), get_class($e), $e->getFile(), $e->getTraceAsString());
+            if (empty($args[2])) {
+                $this->_eventJaegerStartSpan($args[0], $method, $e->getMessage(), get_class($e), $e->getFile(), $e->getTraceAsString());
+            }
             throw $e;
         }
 
-        if (! empty($args[2])) {
+        if (empty($args[2])) {
             $this->_eventJaegerStartSpan($args[0], $method, 'Done[' . $res->getStatusCode() . ']!');
         }
 
