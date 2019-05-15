@@ -52,15 +52,15 @@ class EventHandler
         {
             case 0:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/2.1_2.2'; break;
+            /*case 1:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/3.0_3.1'; break;*/
             case 1:
-                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/3.0_3.1'; break;
-            case 2:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.0_5.1'; break;
-            case 3:
+            case 2:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.2_5.3'; break;
-            case 4:
+            case 3:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.4_5.6'; break;
-            case 5:
+            case 4:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.7_5.8'; break;
             default:
                 return false;
