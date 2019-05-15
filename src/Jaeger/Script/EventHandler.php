@@ -46,21 +46,26 @@ class EventHandler
         return $res;
     }
 
-    protected static function getCodeIgniter2xFile($vendor, $project)
+    protected static function getExtraFile($fk, $vendor, $project)
     {
-        $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci2';
-        return static::getTargetDir($vendor_root, $project);
-    }
+        switch($fk)
+        {
+            case 0:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/2.1_2.2'; break;
+            case 1:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/3.0_3.1'; break;
+            case 2:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.0_5.1'; break;
+            case 3:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.2_5.3'; break;
+            case 4:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.4_5.6'; break;
+            case 5:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.7_5.8'; break;
+            default:
+                return false;
+        }
 
-    protected static function getCodeIgniter3xFile($vendor, $project)
-    {
-        $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci3';
-        return static::getTargetDir($vendor_root, $project);
-    }
-
-    protected static function getLaravelFile($vendor, $project)
-    {
-        $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel';
         return static::getTargetDir($vendor_root, $project);
     }
 
@@ -128,15 +133,6 @@ class EventHandler
 
     public static function postUpdateCmd(Event $event)
     {
-        //检测用户是否要安装框架扩展文件
-        /*$args = $event->getArguments();
-        if (empty($args)) {
-            return ;
-        }
-        if (strtolower(substr($args[0], 0, 16)) !== 'yuslf/jaeger-php') {
-            return ;
-        }*/
-
         //初始化IO对象
         $io = $event->getIO();
 
@@ -155,9 +151,12 @@ class EventHandler
         //让用户选择安那种框架的扩展文件
         $question = '>>Jaeger-PHP:请选择当前项目使用的PHP框架:';
         $choices = [
-            'CodeIgniter 2.x',
-            //'CodeIgniter 3.x',
-            'Laravel 5.x'
+            'CodeIgniter 2.1.x - 2.2.x',
+            //'CodeIgniter 3.0.x - 3.1.x',
+            'Laravel 5.0.x - 5.1.x',
+            'Laravel 5.2.x - 5.3.x',
+            'Laravel 5.4.x - 5.6.x',
+            'Laravel 5.7.x - 5.8.x',
         ];
         $fk = $io->select($question, $choices, '未选择', false, '>Jaeger-PHP:错误的选项: "%s"', true);
         $fk = $fk[0];
@@ -176,11 +175,7 @@ class EventHandler
         }
 
         //让用户确认之前的所有参数，安装目录，文件等（根据不同的PHP框架生成需要安装的文件）
-        if (0 == $fk) {
-            $files = static::getCodeIgniter2xFile($vendor, $root);
-        } else {
-            $files = static::getLaravelFile($vendor, $root);
-        }
+        $files = static::getExtraFile($fk, $vendor, $root);
         if (empty($files)) {
             return $io->error('>>Jaeger-PHP:安装失败！无法取得要安装的文件，请检查文件权限或者重新安装Jaeger-PHP!');
         }
