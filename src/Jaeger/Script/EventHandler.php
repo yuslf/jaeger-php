@@ -69,7 +69,7 @@ class EventHandler
         return static::getTargetDir($vendor_root, $project);
     }
 
-    protected static function getLaravelNotice()
+    protected static function getLaravelNotice($fk)
     {
         $msg = [
             "\n" . '  >>更新配置文件[ROOT/config/app.php]:',
@@ -94,12 +94,20 @@ class EventHandler
             "    >>   'service_version' => 'CustomJaegerServiceVersionNumber'",
             "    >>   'collector' => 'CustomJaegerCollectorUrl'",
             "    >> ]",
-            "\n" . '  >>更新路由文件[ROOT/routes/web.php]:',
-            "    >> Route::get('/jaeger', 'JaegerController@test');",
-            "\n" . '  >>执行:',
-            "    >> php artisan serve --port=8001",
-            "    >> curl http://127.0.0.1:8001",
         ];
+
+        if ($fk <= 2) {
+            $msg[] = "\n" . '  >>更新路由文件[ROOT/app/Http/routes.php]:';
+            $msg[] = "    >> Route::get('/jaeger', 'JaegerController@test');";
+        } else {
+            $msg[] = "\n" . '  >>更新路由文件[ROOT/routes/web.php]:';
+            $msg[] = "    >> Route::get('/jaeger', 'JaegerController@test');";
+        }
+
+        $msg[] = "\n" . '  >>执行:';
+        $msg[] = "    >> php artisan serve --port=8001";
+        $msg[] = "    >> curl http://127.0.0.1:8001";
+
         return $msg;
     }
 
@@ -222,7 +230,7 @@ class EventHandler
         if (0 == $fk) {
             $io->write(static::getCodeIgniter2xNotice());
         } else {
-            $io->write(static::getLaravelNotice());
+            $io->write(static::getLaravelNotice($fk));
         }
 
         $io->write("\n" . '>>Jaeger-PHP: 祝好运!' . "\n");
