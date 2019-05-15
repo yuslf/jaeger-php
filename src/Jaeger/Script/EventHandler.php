@@ -71,10 +71,23 @@ class EventHandler
 
     protected static function getLaravelNotice($fk)
     {
-        $msg = [
+        $msg = [];
+
+        $msg[] = [
             "\n" . '  >>更新配置文件[ROOT/config/app.php]:',
             "    >> 'providers' => [..., App\Providers\JaegerDbServiceProvider::class,]",
             "    >> 'aliases' => [..., 'HttpClient' => App\Facades\HttpClient::class,]",
+        ];
+
+        if ($fk <= 3) {
+            $msg[] = [
+                "\n" . '  >>替换配置文件[ROOT/config/app.php]:',
+                "    >> 'providers' => [..., Illuminate\Redis\RedisServiceProvider::class, ...]",
+                "    >> 为 'providers' => [..., App\Illuminate\Redis\RedisServiceProvider::class, ...]",
+            ];
+        }
+
+        $msg[] = [
             "\n" . '  >>配置中间件[ROOT/app/Http/Kernel.php]:',
             "    >> protected \$middleware = ",
             "    >> [ ...,",

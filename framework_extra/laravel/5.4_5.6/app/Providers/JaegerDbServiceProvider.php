@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Middleware\JaegerBefore;
 use OpenTracing\Formats;
@@ -12,25 +11,6 @@ class JaegerDbServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        Redis::enableEvents();
-        Redis::listen(function($query) {
-            $inject = [];
-            $spanCtx = JaegerBefore::$tracer->extract(Formats\TEXT_MAP, JaegerBefore::$inject);
-            $span = JaegerBefore::$tracer->startSpan('RedisOperate', ['child_of' => $spanCtx]);
-            JaegerBefore::$tracer->inject($span->spanContext, Formats\TEXT_MAP, $inject);
-
-            $config = config('database.redis.' . $query->connectionName);
-            $dsn = 'redis://' . $config['host'] . ':' . $config['port'] . '/' . $config['database'];
-            $span->setTags([
-                'db.instance' => $dsn,
-                'db.type' => 'redis',
-                'db.statement' => $query->command . ' -- parameters:' . json_encode($query->parameters),
-            ]);
-
-            $span->log(['message' => "Redis Operate: [". $dsn .'] '. $query->command .'[' . $query->time . '] end !']);
-            $span->finish();
-        });
-
         DB::listen(function($query) {
             $inject = [];
             $spanCtx = JaegerBefore::$tracer->extract(Formats\TEXT_MAP, JaegerBefore::$inject);
