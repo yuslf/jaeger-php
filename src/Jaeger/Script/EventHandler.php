@@ -52,15 +52,15 @@ class EventHandler
         {
             case 0:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/2.1_2.2'; break;
-            /*case 1:
-                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/3.0_3.1'; break;*/
             case 1:
-                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.0_5.1'; break;
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/ci/3.0_3.1'; break;
             case 2:
-                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.2_5.3'; break;
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.0_5.1'; break;
             case 3:
-                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.4_5.6'; break;
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.2_5.3'; break;
             case 4:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.4_5.6'; break;
+            case 5:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.7_5.8'; break;
             default:
                 return false;
@@ -79,7 +79,7 @@ class EventHandler
             "    >> 'aliases' => [..., 'HttpClient' => App\Facades\HttpClient::class,]",
         ];
 
-        if ($fk <= 3) {
+        if ($fk <= 4) {
             $msg[] = [
                 "\n" . '  >>替换配置文件[ROOT/config/app.php]:',
                 "    >> 'providers' => [..., Illuminate\Redis\RedisServiceProvider::class, ...]",
@@ -109,7 +109,7 @@ class EventHandler
             "    >> ]",
         ];
 
-        if ($fk <= 2) {
+        if ($fk <= 3) {
             $msg[] = "\n" . '  >>更新路由文件[ROOT/app/Http/routes.php]:';
             $msg[] = "    >> Route::get('/jaeger', 'JaegerController@test');";
         } else {
@@ -173,7 +173,7 @@ class EventHandler
         $question = '>>Jaeger-PHP:请选择当前项目使用的PHP框架:';
         $choices = [
             'CodeIgniter 2.1.x - 2.2.x',
-            //'CodeIgniter 3.0.x - 3.1.x',
+            'CodeIgniter 3.0.x - 3.1.x',
             'Laravel 5.0.x - 5.1.x',
             'Laravel 5.2.x - 5.3.x',
             'Laravel 5.4.x - 5.6.x',
@@ -240,7 +240,7 @@ class EventHandler
 
         $io->write("\n" . '>>Jaeger-PHP: 安装成功! 请参考下面的信息配置你的项目：');
 
-        if (0 == $fk) {
+        if ($fk <= 1) {
             $io->write(static::getCodeIgniter2xNotice());
         } else {
             $io->write(static::getLaravelNotice($fk));
