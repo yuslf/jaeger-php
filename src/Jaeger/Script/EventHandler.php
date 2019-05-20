@@ -73,41 +73,35 @@ class EventHandler
     {
         $msg = [];
 
-        $msg[] = [
-            "\n" . '  >>更新配置文件[ROOT/config/app.php]:',
-            "    >> 'providers' => [..., App\Providers\JaegerDbServiceProvider::class,]",
-            "    >> 'aliases' => [..., 'HttpClient' => App\Facades\HttpClient::class,]",
-        ];
+        $msg[] = "\n" . '  >>更新配置文件[ROOT/config/app.php]:';
+        $msg[] = "    >> 'providers' => [..., App\Providers\JaegerDbServiceProvider::class,]";
+        $msg[] = "    >> 'aliases' => [..., 'HttpClient' => App\Facades\HttpClient::class,]";
 
         if ($fk <= 4) {
-            $msg[] = [
-                "\n" . '  >>替换配置文件[ROOT/config/app.php]:',
-                "    >> 'providers' => [..., Illuminate\Redis\RedisServiceProvider::class, ...]",
-                "    >> 为 'providers' => [..., App\Illuminate\Redis\RedisServiceProvider::class, ...]",
-            ];
+            $msg[] = "\n" . '  >>替换配置文件[ROOT/config/app.php]:';
+            $msg[] = "    >> 'providers' => [..., Illuminate\Redis\RedisServiceProvider::class, ...]";
+            $msg[] = "    >> 为 'providers' => [..., App\Illuminate\Redis\RedisServiceProvider::class, ...]";
         }
 
-        $msg[] = [
-            "\n" . '  >>配置中间件[ROOT/app/Http/Kernel.php]:',
-            "    >> protected \$middleware = ",
-            "    >> [ ...,",
-            "    >>   \App\Http\Middleware\JaegerBefore::class,",
-            "    >>   \App\Http\Middleware\JaegerAfter::class,",
-            "    >> ];",
-            "\n" . '  >>配置事件监听器[ROOT/app/Providers/EventServiceProvider.php]:',
-            "    >> protected \$listen = ",
-            "    >> [ ...,",
-            "    >>   'App\Events\JaegerStartSpan' => [",
-            "    >>       'App\Listeners\JaegerStartSpanListener',",
-            "    >>    ],",
-            "    >> ];",
-            "\n" . '  >>更新配置文件[ROOT/config/jeager.php]:',
-            "    >> [",
-            "    >>   'service_name' => 'CustomJaegerServiceName',",
-            "    >>   'service_version' => 'CustomJaegerServiceVersionNumber'",
-            "    >>   'collector' => 'CustomJaegerCollectorUrl'",
-            "    >> ]",
-        ];
+        $msg[] = "\n" . '  >>配置中间件[ROOT/app/Http/Kernel.php]:';
+        $msg[] = "    >> protected \$middleware = ";
+        $msg[] = "    >> [ ...,";
+        $msg[] = "    >>   \App\Http\Middleware\JaegerBefore::class,";
+        $msg[] = "    >>   \App\Http\Middleware\JaegerAfter::class,";
+        $msg[] = "    >> ];";
+        $msg[] = "\n" . '  >>配置事件监听器[ROOT/app/Providers/EventServiceProvider.php]:';
+        $msg[] = "    >> protected \$listen = ";
+        $msg[] = "    >> [ ...,";
+        $msg[] = "    >>   'App\Events\JaegerStartSpan' => [";
+        $msg[] = "    >>       'App\Listeners\JaegerStartSpanListener',";
+        $msg[] = "    >>    ],";
+        $msg[] = "    >> ];";
+        $msg[] = "\n" . '  >>更新配置文件[ROOT/config/jeager.php]:';
+        $msg[] = "    >> [";
+        $msg[] = "    >>   'service_name' => 'CustomJaegerServiceName',";
+        $msg[] = "    >>   'service_version' => 'CustomJaegerServiceVersionNumber'";
+        $msg[] = "    >>   'collector' => 'CustomJaegerCollectorUrl'";
+        $msg[] = "    >> ]";
 
         if ($fk <= 3) {
             $msg[] = "\n" . '  >>更新路由文件[ROOT/app/Http/routes.php]:';
