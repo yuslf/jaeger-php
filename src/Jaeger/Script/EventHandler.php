@@ -62,11 +62,43 @@ class EventHandler
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.4_5.6'; break;
             case 5:
                 $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/laravel/5.7_5.8'; break;
+            case 6:
+                $vendor_root = $vendor . '/yuslf/jaeger-php/framework_extra/lumen/5.0_5.1'; break;
             default:
                 return false;
         }
 
         return static::getTargetDir($vendor_root, $project);
+    }
+
+    protected static function getLumenNotice()
+    {
+        $msg = [
+            "\n" . '  >>更新配置文件[ROOT/bootstrap/app.php]:',
+            '    >> 替换 "$app = new Laravel\Lumen\Application(" 为：',
+            '    >> "$app = new App\Extra\Application("',
+            "\n" . '    >> 增加如下行：',
+            '    >> $app->middleware([ ...',
+            '    >>     \App\Http\Middleware\JaegerBefore::class,',
+            '    >>     \App\Http\Middleware\JaegerAfter::class,',
+            '    >> ... ]);',
+            "\n",
+            '    >> $app->register(App\Providers\EventServiceProvider::class);',
+            '    >> $app->register(App\Providers\JaegerDbServiceProvider::class);',
+            "\n",
+            '    >> $app->configure("jeager");',
+            "\n" . '  >>更新配置文件[ROOT/config/jeager.php]:',
+            '    >> [',
+            "    >>   'service_name' => 'CustomJaegerServiceName',",
+            "    >>   'service_version' => 'CustomJaegerServiceVersionNumber'",
+            "    >>   'collector' => 'CustomJaegerCollectorUrl'",
+            '    >> ]',
+            "\n" . '  >>执行:',
+            '    >> php artisan serve --port=8001',
+            '    >> curl http://127.0.0.1:8001'
+        ];
+
+        return $msg;
     }
 
     protected static function getLaravelNotice($fk)
@@ -172,6 +204,7 @@ class EventHandler
             'Laravel 5.2.x - 5.3.x',
             'Laravel 5.4.x - 5.6.x',
             'Laravel 5.7.x - 5.8.x',
+            'Lumen 5.0.x - 5.1.x',
         ];
         $fk = $io->select($question, $choices, '未选择', false, '>Jaeger-PHP:错误的选项: "%s"', true);
         $fk = $fk[0];
@@ -236,8 +269,10 @@ class EventHandler
 
         if ($fk <= 1) {
             $io->write(static::getCodeIgniter2xNotice());
-        } else {
+        } else if ($fk <= 5) {
             $io->write(static::getLaravelNotice($fk));
+        } else {
+            $io->write(static::getLumenNotice());
         }
 
         $io->write("\n" . '>>Jaeger-PHP: 祝好运!' . "\n");
