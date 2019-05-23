@@ -71,32 +71,42 @@ class EventHandler
         return static::getTargetDir($vendor_root, $project);
     }
 
-    protected static function getLumenNotice()
+    protected static function getLumenNotice($fk)
     {
-        $msg = [
-            "\n" . '  >>更新配置文件[ROOT/bootstrap/app.php]:',
-            '    >> 替换 "$app = new Laravel\Lumen\Application(" 为：',
-            '    >> "$app = new App\Extra\Application("',
-            "\n" . '    >> 增加如下行：',
-            '    >> $app->middleware([ ...',
-            '    >>     \App\Http\Middleware\JaegerBefore::class,',
-            '    >>     \App\Http\Middleware\JaegerAfter::class,',
-            '    >> ... ]);',
-            "\n",
-            '    >> $app->register(App\Providers\EventServiceProvider::class);',
-            '    >> $app->register(App\Providers\JaegerDbServiceProvider::class);',
-            "\n",
-            '    >> $app->configure("jeager");',
-            "\n" . '  >>更新配置文件[ROOT/config/jeager.php]:',
-            '    >> [',
-            "    >>   'service_name' => 'CustomJaegerServiceName',",
-            "    >>   'service_version' => 'CustomJaegerServiceVersionNumber'",
-            "    >>   'collector' => 'CustomJaegerCollectorUrl'",
-            '    >> ]',
-            "\n" . '  >>执行:',
-            '    >> php artisan serve --port=8001',
-            '    >> curl http://127.0.0.1:8001'
-        ];
+        $msg = [];
+        $msg[] = "\n" . '  >>更新配置文件[ROOT/bootstrap/app.php]:';
+        if ($fk < 7) {
+            $msg[] = '    >> 替换 "$app = new Laravel\Lumen\Application(" 为：';
+            $msg[] = '    >> "$app = new App\Extra\Application("' . "\n";
+        }
+        $msg[] = '    >> 增加如下行：';
+        $msg[] = '    >> $app->middleware([ ...';
+        $msg[] = '    >>     \App\Http\Middleware\JaegerBefore::class,';
+        $msg[] = '    >>     \App\Http\Middleware\JaegerAfter::class,';
+        $msg[] = '    >> ... ]);' . "\n";
+        $msg[] = '    >> $app->register(App\Providers\EventServiceProvider::class);';
+        $msg[] = '    >> $app->register(App\Providers\JaegerDbServiceProvider::class);';
+        $msg[] = "\n";
+        $msg[] = '    >> $app->configure("jeager");';
+        if ($fk >= 7) {
+            $msg[] = '    >> $app->configure("database");';
+        }
+        $msg[] = "\n" . '  >>配置事件监听器[ROOT/app/Providers/EventServiceProvider.php]:';
+        $msg[] = "    >> protected \$listen = ";
+        $msg[] = "    >> [ ...,";
+        $msg[] = "    >>   'App\Events\JaegerStartSpan' => [";
+        $msg[] = "    >>       'App\Listeners\JaegerStartSpanListener',";
+        $msg[] = "    >>    ],";
+        $msg[] = "    >> ];";
+        $msg[] = "\n" . '  >>更新配置文件[ROOT/config/jeager.php]:';
+        $msg[] = '    >> [';
+        $msg[] = "    >>   'service_name' => 'CustomJaegerServiceName',";
+        $msg[] = "    >>   'service_version' => 'CustomJaegerServiceVersionNumber'";
+        $msg[] = "    >>   'collector' => 'CustomJaegerCollectorUrl'";
+        $msg[] = '    >> ]';
+        $msg[] = "\n" . '  >>执行:';
+        $msg[] = '    >> php artisan serve --port=8001';
+        $msg[] = '    >> curl http://127.0.0.1:8001';
 
         return $msg;
     }
@@ -205,6 +215,7 @@ class EventHandler
             'Laravel 5.4.x - 5.6.x',
             'Laravel 5.7.x - 5.8.x',
             'Lumen 5.0.x - 5.1.x',
+            'Lumen 5.7.x - 5.8.x',
         ];
         $fk = $io->select($question, $choices, '未选择', false, '>Jaeger-PHP:错误的选项: "%s"', true);
         $fk = $fk[0];
