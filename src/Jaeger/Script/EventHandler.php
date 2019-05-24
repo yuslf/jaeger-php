@@ -88,13 +88,13 @@ class EventHandler
         $msg[] = '    >> $app->register(App\Providers\JaegerDbServiceProvider::class);';
         if (9 == $fk) {
             $msg[] = '    >> $app->register(Illuminate\Redis\RedisServiceProvider::class);';
-        } else if (8 == $fk) {
+        } else if ($fk >= 7) {
             $msg[] = '    >> $app->register(App\Illuminate\Redis\RedisServiceProvider::class);';
         }
 
         $msg[] = "\n";
         $msg[] = '    >> $app->configure("jeager");';
-        if ($fk >= 8) {
+        if ($fk >= 7) {
             $msg[] = '    >> $app->configure("database");';
         }
         $msg[] = "\n" . '  >>配置事件监听器[ROOT/app/Providers/EventServiceProvider.php]:';
@@ -228,7 +228,8 @@ class EventHandler
             'Laravel 5.4.x - 5.6.x',
             'Laravel 5.7.x - 5.8.x',
             'Lumen 5.0.x - 5.1.x',
-            'Lumen 5.2.x - 5.3.x',
+            'Lumen 5.2.x',
+            'Lumen 5.3.x',
             'Lumen 5.4.x - 5.6.x',
             'Lumen 5.7.x - 5.8.x',
         ];
